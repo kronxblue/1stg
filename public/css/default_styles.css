@@ -1,0 +1,624 @@
+@font-face {
+	font-family:'PilsenPlakat';
+	src: url('font/PilsenPlakat.eot');
+	src: url('font/PilsenPlakat.eot?#iefix') format('embedded-opentype'),
+		url('font/PilsenPlakat.woff') format('woff'),
+		url('font/PilsenPlakat.ttf') format('truetype'),
+		url('font/PilsenPlakat.otf') format('opentype'),
+		url('font/PilsenPlakat.svg#PilsenPlakat-Regular') format('svg');
+	font-weight: 400;
+	font-style: normal;
+	font-stretch: normal;
+}
+
+@font-face {
+    font-family:'Droid Sans';
+    src: url('font/DroidSans.eot');
+    src: url('font/DroidSans.eot?#iefix') format('embedded-opentype'),
+        url('font/DroidSans.woff') format('woff'),
+        url('font/DroidSans.ttf') format('truetype'),
+        url('font/DroidSans.otf') format('opentype'),
+        url('font/DroidSans.svg#DroidSans-Regular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+}
+
+#loading {
+    width: 500px;
+    box-shadow: 0px 0px 3px #999;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+
+}
+
+body {
+    /*default*/
+    /*margin-bottom: 385px;*/
+    margin-bottom: 240px;
+    padding: 0;
+    color: #444;
+    font-family: "Droid Sans";
+}
+
+.join .reffered {
+    padding-right: 10px;
+    float: right;
+    margin-top: 40px;
+}
+
+h1,h2,h3,h4 {
+    font-family: "PilsenPlakat";
+}
+
+.testimonial .media-object {
+    max-height: 80px;
+    max-width: 80px;
+}
+
+.testimonial  .testimonial-body {
+    padding-bottom: 15px;
+}
+
+.end-btn {
+    padding-bottom: 40px;
+    padding-top: 10px;
+}
+
+.end-btn h1 {
+    margin-top: 10px;
+}
+
+.end-btn .btn {
+    margin: 5px 0px;;
+}
+
+.declaimer {
+    font-size: 12px;
+    color: #999;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.text-dark {
+    color: #333;
+}
+
+.text-orange {
+    color: #f26522;
+}
+
+.text-purple {
+    color: #900bd5;
+}
+
+.text-green {
+    color: #64c300;
+}
+
+.text-blue {
+    color: #027cda;
+}
+
+.text-red {
+    color: #bd0000;
+}
+
+.more-arrow img {
+    height: 35px;
+}
+
+.more-arrow a:hover {
+    color: #bd0000;
+}
+
+.char-jack {
+    background-image: url('../images/jack.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 120px;
+}
+
+.char-mike {
+    background-image: url('../images/mike.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 120px;
+}
+
+.char-joe {
+    background-image: url('../images/joe.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 120px;
+}
+
+.char-tina {
+    background-image: url('../images/tina.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 120px;
+}
+
+.char-desc {
+
+    border-radius: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0px 1px 3px #333;
+    min-height: 145px;
+}
+
+.bg-orange {
+    background-color: #f26522;
+}
+
+.bg-purple {
+    background-color: #900bd5;
+}
+
+.bg-green {
+    background-color: #64c300;
+}
+
+.bg-blue {
+    background-color: #027cda;
+}
+
+.shadow {
+    box-shadow: 0px 0px 3px #333;
+}
+
+.character {
+    margin: 20px 0px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+.navbar-default {
+    box-shadow: 0px 1px 5px #000;
+    border-bottom: none;
+}
+
+.navbar-brand {
+    padding: 0px 15px;
+}
+
+.nav {
+    font-weight: bold;
+    text-align: right;
+}
+
+
+
+.nav-description {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+.header-link {
+    background-color: #333;
+    min-height: 35px;
+}
+
+.header-link ul {
+    margin: 0px;
+    display: block;
+    float: right;
+    color: #ccc;
+}
+
+.header-link ul li {
+    display: block;
+    float: left;
+    margin-left: 10px;
+}
+
+.header-link ul li a {
+    display: block;
+    padding: 9px 5px;
+    font-size: 12px;
+}
+
+.header-link ul li span {
+    display: block;
+    padding: 9px 5px;
+    font-size: 12px;
+}
+
+.header-divider {
+    height: 50px;
+    background-image: url('../images/divider.png');
+    background-position: center;
+    background-repeat: repeat-x;
+}
+
+.login {
+    margin-top: 50px;
+    padding-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px #333;
+}
+
+#alert {
+    display: none;
+}
+
+.dot-orange {
+    height: 50px;
+    background-image: url('../images/dot-orange.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dot-purple {
+    height: 50px;
+    background-image: url('../images/dot-purple.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dot-green {
+    height: 50px;
+    background-image: url('../images/dot-green.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dot-blue {
+    height: 50px;
+    background-image: url('../images/dot-blue.png');
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.graphic-flow {
+    width: 100%;
+    max-width: 980px;
+    display: block;
+    margin: 10px auto;
+}
+
+.quotes-box {
+
+    background: rgb(238,238,238); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(238,238,238,1) 1%, rgba(255,255,255,1) 50%, rgba(238,238,238,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,rgba(238,238,238,1)), color-stop(50%,rgba(255,255,255,1)), color-stop(100%,rgba(238,238,238,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(238,238,238,1) 1%,rgba(255,255,255,1) 50%,rgba(238,238,238,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(238,238,238,1) 1%,rgba(255,255,255,1) 50%,rgba(238,238,238,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(238,238,238,1) 1%,rgba(255,255,255,1) 50%,rgba(238,238,238,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(238,238,238,1) 1%,rgba(255,255,255,1) 50%,rgba(238,238,238,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+
+    margin-bottom: 20px;
+}
+
+.quotes-text {
+    margin-top: 10px;
+}
+
+.donald-trump {
+    height: 200px;
+    background-image: url('../images/donald-trump.png');
+    background-position: bottom left;
+    background-repeat: no-repeat;
+}
+
+.robert-kiyosaki {
+    height: 200px;
+    background-image: url('../images/robert-kiyosaki.png');
+    background-position: bottom right;
+    background-repeat: no-repeat;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    /*default*/ 
+    /*height: 335px;*/
+    height: 180px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 3px #333;
+}
+
+.footer > .container{
+    padding: 10px 15px;
+}
+
+.footer h5{
+    color: #333;
+    margin-bottom: 0px;
+}
+
+.footer-nav {
+    margin: 0px;
+    display: block;
+    padding: 0px;
+}
+
+.footer-nav li {
+    display: block;
+}
+
+.footer-nav li a {
+    display: block;
+    font-size: 12px;
+    padding: 5px 0px 0px;
+    color: #666;
+}
+
+.footer-nav li a:hover {
+    color: #333;
+}
+
+.footer .text-muted {
+    font-size: 12px;
+}
+
+.footer .country .caret {
+    margin-left: 10px;
+}
+
+.footer .country {
+    margin-top: 5px;
+}
+
+.footer .country .dropdown-menu {
+    font-size: 12px;
+}
+
+.wrapper-video {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    z-index: -1;
+    text-align: center;
+}
+
+#bg-video {
+    display: block;
+    z-index: -1;
+}
+
+.content-index {
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.country-index {
+    position: fixed;
+    bottom: 12%;
+    left: 0;
+    width: 100%;
+}
+
+video {
+    display: block;
+}
+
+#loading-ov {
+    position: fixed;
+    z-index: 200;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    /*display: none;*/
+}
+
+.ov-content {
+    background-color: #333;
+    width: 200px;
+    display: block;
+    height: 100px;
+    margin: 20% auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px #000;
+
+}
+.ov-body {
+    font-weight: bold;
+    color: #999;
+    display: table-cell;
+    height: 100px;
+    width: 200px;
+    vertical-align: middle;
+}
+
+.loading-text {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.loading-bar .progress{
+    margin-bottom: 0;
+}
+
+.input-group-select {
+    position: relative;
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+}
+
+.input-group-select .form-control {
+    display: table-cell;
+    width: auto;
+}
+
+.input-group-select .form-control {
+    border-radius: 4px;
+    float: left;
+    width: auto;
+}
+
+.input-group-select > .form-control:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.input-group-select > .form-control:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group-select > .form-control:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+@media (min-width: 768px) {
+    .navbar-nav > li > a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        line-height: 15px;
+    }
+
+    .char-title {
+        height: 120px;
+        position: relative;
+    }
+
+    .char-title .text-bottom {
+        position: absolute;
+        bottom: 5px;
+    }
+
+    .char-desc {
+        min-height: 200px;
+    }
+
+    .char-jack {
+        height: 130px;
+    }
+
+    .char-mike {
+        height: 130px;
+    }
+
+    .char-joe {
+        height: 130px;
+    }
+
+    .char-tina {
+        height: 130px;
+    }
+
+    .quotes-text {
+        font-size: 14px; 
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+
+
+    .navbar-nav > li > a {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        line-height: 20px;
+    }
+
+    .char-title {
+        height: 120px;
+        position: relative;
+    }
+
+    .char-title .text-bottom {
+        position: absolute;
+        bottom: 5px;
+    }
+
+    .char-desc {
+        min-height: 130px;
+    }
+
+    .char-jack {
+        height: 130px;
+    }
+
+    .char-mike {
+        height: 130px;
+    }
+
+    .char-joe {
+        height: 130px;
+    }
+
+    .char-tina {
+        height: 130px;
+    }
+
+
+}
+
+@media screen and (max-width: 767px) {
+    .navbar-nav {
+        margin-top: 30px;
+    }
+
+
+    body {
+        /*default*/
+        /*margin-bottom: 580px;*/
+        margin-bottom: 250px;
+    }
+
+
+
+    .char-title {
+        height: 120px;
+        position: relative;
+    }
+
+    .char-title .text-bottom {
+        position: absolute;
+        bottom: 5px;
+    }
+
+    .char-desc {
+        min-height: 210px;
+    }
+
+    .char-jack {
+        height: 130px;
+    }
+
+    .char-mike {
+        height: 130px;
+    }
+
+    .char-joe {
+        height: 130px;
+    }
+
+    .char-tina {
+        height: 130px;
+    }
+
+    .donald-trump .quotes-text, .robert-kiyosaki .quotes-text {
+        font-size: 13px; 
+    }
+
+    .footer {
+        /* Set the fixed height of the footer here */
+        /*default*/
+        /*height: 520px;*/
+        height: 200px;
+    }
+}

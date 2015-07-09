@@ -1,0 +1,737 @@
+*::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar
+{
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb
+{
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #999;
+}
+
+body {
+    min-height: 500px;
+    padding-top: 50px;
+    overflow-x: hidden;
+    background-color: #eee;
+}
+
+table.table tr td {
+    vertical-align: middle;
+}
+
+#userImage {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: -55px;
+    left: 0px;
+}
+
+.userImage {
+    position: relative;
+}
+
+#alert {
+    display: none;
+}
+
+.text-white {
+    color: #fff;
+}
+
+.text-dark {
+    color: #333;
+}
+
+.text-orange {
+    color: #f26522;
+}
+
+.text-purple {
+    color: #900bd5;
+}
+
+.text-green {
+    color: #64c300;
+}
+
+.text-blue {
+    color: #027cda;
+}
+
+.text-red {
+    color: #bd0000;
+}
+
+.bg-highlight {
+    background-color: rgba(204,255,51,0.5);
+}
+
+.label {
+    display: inline-block;
+}
+
+.navbar-brand {
+    padding: 0px;
+    display: block;
+}
+
+.navbar-menu {
+    display: block;
+}
+
+.navbar-menu .navbar-nav {
+    margin: 0px;
+}
+
+.navbar-menu ul {
+    margin-top: 5px;
+}
+
+.dropdown-menu {
+    padding: 0px;
+    background-color: #fff;
+}
+
+.dropdown .area {
+    width: 400px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown .menu {
+    min-width: 200px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-menu .fa {
+    margin: 0px 5px;
+
+}
+
+.dropdown-menu .dropdown-header {
+    background-color: #333;
+    color: #eee;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.dropdown-menu.menu .dropdown-body {
+    background-color: #fff;
+    color: #333;
+    font-size: 12px;
+    padding: 10px;
+    min-height: 50px;
+    max-height: 300px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-menu.area .dropdown-body {
+    background-color: #fff;
+    color: #333;
+    font-size: 12px;
+    padding: 0px;
+    min-height: 50px;
+    max-height: 300px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-menu.area .dropdown-body .message-title {
+    font-weight: bold;
+}
+
+.dropdown-menu.area .dropdown-body .message-desc {
+    color: #666;
+}
+
+.dropdown-menu.area .dropdown-body .message-date {
+    color: #999;
+}
+
+.dropdown-menu .dropdown-body .fa {
+    margin: 0px 10px;
+}
+
+.dropdown .menu .dropdown-body a {
+    display: block;
+    padding: 5px 5px 3px;
+    margin: 0px -10px;
+}
+
+.dropdown .menu .dropdown-body .divider {
+    padding: 0px;
+}
+
+.dropdown .area .dropdown-body a {
+    display: block;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.dropdown .area .dropdown-body a img {
+    max-width: 50px;
+}
+
+.dropdown .area .dropdown-loading {
+    display: block;
+    background-color: #fff;
+    text-align: center;
+    padding: 5px;
+    z-index: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.dropdown-menu .dropdown-footer {
+    background-color: #eee;
+    color: #333;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown .dropdown-toggle {
+    height: 50px;
+    border-radius: 0px;
+}
+
+.navbar-inverse .navbar-nav > li.dropdown > a.dropdown-toggle {
+    background-color: #444;
+    color: #bbb;
+}
+
+.navbar-inverse .navbar-nav > li.dropdown > a.dropdown-toggle:hover {
+    background-color: #000;
+    color: #666;
+}
+
+.nav-pills > li.dropdown > a.dropdown-toggle > .badge {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    background-color: #FF4444;
+    font-size: 10px;
+    border-radius: 3px;
+    padding: 3px 5px;
+}
+
+.dropdown-toggle i {
+    margin-top: 5px;
+}
+
+#profile-menu {
+    padding-top: 6px;
+    padding-right: 6px;
+}
+
+
+#profile-menu .profile {
+    float: left;
+    max-height: 30px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#profile-menu .profile .thumbnail {
+    display: block;
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 0px 10px 0px 0px;
+    padding: 0px;
+}
+
+#profile-menu .profile .user-details {
+    float: left;
+    display: inline-block;
+    max-height: 40px;
+    /*    min-width: 80px;
+        max-width: 140px;*/
+    margin: 10px 0px 0px;
+    padding: 0px;
+}
+
+#profile-menu .profile .user-details span {
+    height: 40px;
+    display: inline-block;
+}
+
+#profile-menu .profile .user-details .fa {
+    margin-left: 5px;
+    padding: 0px;
+}
+
+.content-wrap {
+    position: relative;
+    overflow-x: hidden;
+    left: 0px;
+    padding-top: 50px;
+}
+
+.content-wrap-blank {
+    position: relative;
+    overflow-x: hidden;
+    left: 0px;
+    padding-top: 10px;
+}
+
+.pinList .tab-content {
+    margin: 10px;
+}
+
+.sidemenu-open {
+    left: 200px;
+    padding-right: 200px;
+}
+
+.sidemenu-open .sidemenu {
+    left: 0px;
+}
+
+.sidemenu-open .sidemenu-toggle {
+    left: 0px;
+}
+
+.sidemenu-open .breadcrumb {
+    left: 200px;
+}
+
+.sidemenu {
+    background-color: #333;
+    box-shadow: 0px 0px 1px #999;
+    color: #ccc;
+    position: fixed;
+    top: 90px;
+    left: -200px;
+    width: 200px;
+    height: 100%;
+    padding: 0px;
+    overflow-y: auto;
+}
+
+.sidemenu ul.navigation{
+    margin-bottom: 150px;
+}
+
+.sidemenu ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+.sidemenu ul li {
+    display: block;
+    border: 1px solid #333;
+    margin: 0px;
+
+
+}
+
+.sidemenu ul li a {
+    color: #ccc;
+    display: block;
+    padding: 10px 10px;
+    background-color: #555;
+
+}
+
+.sidemenu ul a {
+    color: #ccc;
+}
+
+.sidemenu ul li:first-child, .sidemenu ul li:first-child a {
+    border-radius: 10px 10px 0px 0px;
+}
+
+.sidemenu ul li:last-child, .sidemenu ul li:last-child a {
+    border-radius: 0px 0px 10px 10px;
+}
+
+.sidemenu ul li a.active {
+    background-color: #333;
+    color: #fff;
+}
+
+.sidemenu ul a:hover {
+    color: #428bca;
+    background-color: #444;
+    text-decoration: none;
+}
+
+.sidemenu ul li.has-submenu b {
+    margin-top: 3px;
+}
+
+.sidemenu ul li.has-submenu .submenu {
+    color: #ccc;
+    display: none;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 10px;
+    border-top: 1px solid #333;
+    border-bottom: none;
+}
+
+.sidemenu ul li.has-submenu .submenu li{
+    display: block;
+    margin: 0px;
+    border: none;
+    border-bottom: 1px solid #333;
+}
+
+.sidemenu ul li.has-submenu .submenu li a{
+    color: #ccc;
+    display: block;
+    padding: 10px 10px 10px 10px;
+    background-color: #444;
+    border-radius: 0px;
+}
+
+.sidemenu ul li.has-submenu .submenu li a:hover{
+    color: #666;
+}
+
+.sidemenu ul li .badge {
+    font-size: 11px;
+    font-weight: normal;
+    position: absolute;
+    right: 5px;
+    background-color: #FF4444;
+    z-index: 0;
+}
+
+.sidemenu ul li.has-submenu.submenu-open{
+    border-bottom: none;
+}
+
+.sidemenu ul li.submenu-open .submenu {
+    display: block;
+}
+
+.sidemenu i.fa {
+    margin-top: 3px;
+    margin-right: 5px;
+}
+
+.sidemenu .profile-details {
+    background-color: #fff;
+    display: block;
+    padding: 5px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.sidemenu .profile-details table tr td {
+    border: none;
+}
+
+.sidemenu .profile-details .profile-pic {
+    padding: 0px;
+}
+
+.sidemenu-toggle {
+    background-color: #428bca;
+    color: #fff;
+    position: fixed;
+    left: -120px;
+    top: 50px;
+    width: 200px;
+    padding: 10px;
+    text-decoration: none;
+    box-shadow: 0px 0px 1px #999;
+    z-index: 999;
+}
+
+.sidemenu-toggle:hover {
+    text-decoration: none;
+}
+
+.sidemenu-toggle-icon {
+    margin-top: 5px;
+}
+
+.content-wrap,
+.sidemenu,
+.sidemenu-toggle,
+.breadcrumb,
+.content{
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.breadcrumb {
+    box-shadow: 0px 0px 1px #999;
+    border-radius: 0px;
+    position: fixed;
+    top: 50px;
+    height: 40px;
+    left: 80px;
+    padding-top: 10px;
+    width: 100%;
+    z-index: 999;
+}
+
+.content {
+    padding: 0px;
+    margin: 0px 10px;
+    z-index: 1;
+    background-color: #fff;
+    min-height: 500px;
+    padding-bottom: 100px;
+}
+
+#dashboard #qlink .ql-btn {
+    margin-bottom: 15px;
+}
+
+#dashboard #gps {
+    text-align: center;
+    font-weight: bold;
+}
+
+#dashboard #gps .panel-body h1 {
+    font-size: 72px;
+}
+
+#account_setup {
+    margin-bottom: 10px;
+}
+
+.account-setup form {
+    margin-top: 30px;
+}
+
+.account-setup .divider {
+    margin: 10px 0px;
+    display: block;
+    height: 1px;
+    background-color: #eee;
+    clear: both;
+}
+
+#geneology .btn{
+    padding: 0px;
+    width: 100%;
+}
+
+#geneology .thumbnail{
+    margin-bottom: 0px;
+    min-height: 120px;
+}
+
+#geneology .thumbnail .caption{
+    padding: 0px;
+    padding-top: 10px;
+}
+
+#geneology .thumbnail .caption p{
+    margin-bottom: 0px;
+    min-height: 30px;
+    overflow: hidden;
+}
+
+#geneology .col-margin-bottom a {
+    margin-bottom: 10px;
+}
+
+#addagent form, #reviewPayment form, #withdrawal form, #addNewSupplier form, #addCommission form {
+    max-width: 1000px;
+    margin: 0px auto;
+}
+
+#addagent .form-group {
+    position: relative;
+}
+
+#addagent .form-group .agentList, #agentCommission .form-group .agentList, #addCommission .form-group .agentList {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+#addagent .form-group .agentList .alert, #agentCommission .form-group .agentList .alert, #addCommission .form-group .agentList .alert {
+    margin-bottom: 0px;
+}
+
+#addagent .form-group .agentList .agentID, #agentCommission .form-group .agentList .agentID, #addCommission .form-group .agentList .agentID {
+    padding: 5px 10px;
+    border-top: 1px solid #ccc;
+    display: block;
+    width: 100%;
+}
+
+#addagent .form-group .agentList .agentID:hover, #agentCommission .form-group .agentList .agentID:hover, #addCommission .form-group .agentList .agentID:hover {
+    background-color: #eee;
+}
+
+#addagent .form-group .agentList .agentID .thumbnail, #agentCommission .form-group .agentList .agentID .thumbnail, #addCommission .form-group .agentList .agentID .thumbnail {
+    margin-bottom: 0px;
+}
+
+#agentCommission .form-group .agentList .agentID .thumbnail img {
+    max-height: 50px;
+}
+
+#manageWithdrawal #allAction {
+    display: none;
+}
+
+.input-group-select {
+    position: relative;
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+}
+
+.input-group-select .form-control {
+    display: table-cell;
+    width: auto;
+}
+
+.input-group-select .form-control {
+    border-radius: 4px;
+    float: left;
+    width: auto;
+}
+
+.input-group-select > .form-control:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.input-group-select > .form-control:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.input-group-select > .form-control:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#supplier .fullDesc {
+    display: none;
+}
+
+#supplierDetails [class^=col-] {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+#advertisement #detailsModal .modal-body [class^=col-]{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.shadow {
+    box-shadow: 0px 0px 3px #999;
+}
+
+.footer {
+    margin: 10px 0px;
+    padding-bottom: 10px;
+    border-top: 1px solid #ccc;
+    position: relative;
+}
+
+@media (max-width: 767px) {
+
+    .navbar-nav {
+        float: left;
+        margin: 0;
+    }
+    .navbar-nav > li {
+        float: left;
+    }
+    .navbar-nav > li > a {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .navbar-nav.navbar-right:last-child {
+        margin-right: -15px;
+    }
+    .navbar-nav .open .dropdown-menu {
+        position: fixed;
+        float: none;
+        width: 100%;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .navbar-nav .open .dropdown-menu > li > a,
+    .navbar-nav .open .dropdown-menu .dropdown-header {
+        padding: 5px 15px 5px 25px;
+    }
+    .navbar-nav .open .dropdown-menu > li > a {
+        line-height: 20px;
+    }
+    .navbar-nav .open .dropdown-menu > li > a:hover,
+    .navbar-nav .open .dropdown-menu > li > a:focus {
+        background-image: none;
+    }
+    .dropdown-menu .dropdown-header {
+        background-color: #333;
+        color: #eee;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .dropdown-menu .dropdown-body.area {
+        background-color: #fff;
+        color: #333;
+        font-size: 12px;
+        padding: 10px;
+        min-height: 50px;
+        max-height: 300px;
+    }
+
+    .dropdown-menu .dropdown-footer {
+        background-color: #eee;
+        color: #333;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .dropdown .menu .dropdown-body {
+        background-color: #eee;
+        color: #333;
+        font-size: 16px;
+        padding: 10px;
+        min-height: 50px;
+        max-height: 300px;
+        box-shadow: 0px 0px 1px #333;
+    }
+
+    .dropdown .menu .dropdown-body a {
+        display: block;
+        padding: 15px 5px 10px;
+        margin: 0px -10px;
+    }
+
+    .navbar-inverse .navbar-nav .open .menu .divider {
+        padding: 0px;
+        background-color: #ccc;
+    }
+
+    #geneology .thumbnail .caption p{
+        font-size: 70%;
+    }
+
+}
