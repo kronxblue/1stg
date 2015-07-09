@@ -16,8 +16,14 @@ $(document).ready(function () {
 
         return false;
     });
+    
+    $("#advertisement").on("click","#btnSearch", function(){
+        var url = $(this).attr("data-url");
+        var data = $("#s").val();
+        window.location = url + data;
+    });
 
-    advertisementList();
+//    advertisementList();
 
 });
 

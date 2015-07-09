@@ -30,16 +30,16 @@ class advertisement_model extends model {
 	public function advertisementList() {
 		$self_address = BASE_PATH . "advertisement";
 
-		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='250px'>Name</th><th class='text-center' width='150px'>Category</th><th class='text-center' width='150px'>State, Country</th><th class='text-center' width='300px'>Business Desc</th><th class='text-center' width='150px'>Advertisement</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='250px'>Action</th></tr></thead><tbody>";
+		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='150px'>Ads ID</th><th class='text-center' width='150px'>Ads Pin</th><th class='text-center' >Supplier Name</th><th class='text-center' >Ads Name</th><th class='text-center' width='150px'>Document Date</th><th class='text-center' width='150px'>Receive Date</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='150px'>Start Date</th><th class='text-center' width='150px'>Expiry Date</th><th class='text-center' width='300px'></th></tr></thead><tbody>";
 		$content = "";
 		$pagination = "";
 
 		$agent_id = session::get(AGENT_SESSION_NAME);
 
-		$listExist = user::checkExist("user_suppliers", "agent_id = '$agent_id'");
+		$listExist = user::checkExist("advertisement_view", "agent_id = '$agent_id'");
 
 		if (!$listExist) {
-			$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
+			$content .= "<tr><td class ='text-center' colspan='11'>No advertisement record.</td></tr>";
 		} else {
 
 			if (isset($_REQUEST['s'])) {
@@ -48,7 +48,7 @@ class advertisement_model extends model {
 
 				if ($_GET['s'] != "") {
 					$searchItm = $s;
-					$searchSQL = " AND (comp_name LIKE '%$searchItm%')";
+					$searchSQL = " AND (ads_name LIKE '%$searchItm%') OR (supplier_id LIKE '%$searchItm%')";
 					$get_search = "&s=$searchItm";
 				} else {
 					$searchItm = NULL;
@@ -73,9 +73,9 @@ class advertisement_model extends model {
 			$from = (($current_page * $max_result) - $max_result);
 
 			if ($searchItm == NULL) {
-				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' ORDER BY id DESC");
+				$supplierList_full = $this->db->select("advertisement_view", "*", "agent_id = '$agent_id' ORDER BY id DESC");
 			} else {
-				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC");
+				$supplierList_full = $this->db->select("advertisement_view", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC");
 			}
 //
 			$total_row = count($supplierList_full);

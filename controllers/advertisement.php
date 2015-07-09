@@ -18,6 +18,7 @@ class advertisement extends controller {
 		if (isset($_REQUEST['sid'])) {
 			$supplier_id = $_GET['sid'];
 			$supplier_data = user::getSupplierData("supplier_id", $supplier_id);
+			$data['title'] = $supplier_data['comp_name'];
 
 			$this->breadcrumb->add($supplier_data['comp_name'], "advertisement");
 		} else {
@@ -25,7 +26,7 @@ class advertisement extends controller {
 			$supplier_data = FALSE;
 		}
 
-		$this->view->supplier_data = $supplier_data;
+		$this->view->data = $data;
 
 		$this->view->breadcrumbs = $this->breadcrumb->get();
 		$this->view->js = array('advertisement/js/index.js');

@@ -1,5 +1,5 @@
 <?php
-$supplier_data = $this->supplier_data;
+$data = $this->data;
 
 $header_color = "active";
 ?>
@@ -9,12 +9,8 @@ $header_color = "active";
     </h2>
     <div class="col-xs-12">
         <h3>
-	    <?php if ($supplier_data == FALSE) { ?>
-		    Summary
-		    <?php
-	    } else {
-		    print_r($supplier_data['comp_name']);
-	    }
+	    <?php
+	    print_r($data['title']);
 	    ?>
         </h3>
 	<input type="hidden" id="p" name="p" value="<?php echo isset($_REQUEST['p']) ? $_GET['p'] : "1"; ?>">
@@ -60,6 +56,26 @@ $header_color = "active";
 		</div>
 	    </div>
 	</div>
+	<?php
+	echo $data['list'];
+	?>
+	<div id="searchAds" class="row">
+            <div class="col-sm-4">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
+                    <input type="text" id="s" name="s" class="form-control" placeholder="Search advertisement name" value="<?php echo isset($_REQUEST['s']) ? $_GET['s'] : NULL; ?>">
+                    <span class="input-group-btn">
+			<?php
+			echo isset($_REQUEST['s']) ? "<a id='btnClear' class='btn btn-danger' href='" . BASE_PATH . "advertisement'>Clear search <i class='fa fa-times fa-fw'></i></a>" : NULL;
+			?>
+                        <button id="btnSearch" class="btn btn-default" type="button" data-url="<?php echo BASE_PATH; ?>advertisement?s=">Go!</button>
+
+                    </span>
+		    <input type="hidden" id="p" name="p" value="<?php echo isset($_REQUEST['p']) ? $_GET['p'] : "1"; ?>">
+                </div>
+            </div>
+        </div>
+        <br/>
         <div id="adsList" class="table-responsive" data-url="<?php echo BASE_PATH; ?>advertisement/ajaxAdsList" data-spec="<?php echo $supplier_data; ?>">
             <table class="table table-bordered table-condensed">
                 <thead>
