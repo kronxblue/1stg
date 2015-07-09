@@ -12,12 +12,16 @@ class advertisement extends controller {
 
 	function index() {
 
+		$data = array();
+		$data['list'] = $this->model->advertisementList();
+
 		if (isset($_REQUEST['sid'])) {
 			$supplier_id = $_GET['sid'];
 			$supplier_data = user::getSupplierData("supplier_id", $supplier_id);
 
 			$this->breadcrumb->add($supplier_data['comp_name'], "advertisement");
 		} else {
+			$data['title'] = "Summary";
 			$supplier_data = FALSE;
 		}
 
@@ -29,7 +33,7 @@ class advertisement extends controller {
 	}
 
 	function addNew() {
-		
+
 		$agent_id = session::get(AGENT_SESSION_NAME);
 
 		if (isset($_REQUEST['sid'])) {
@@ -38,7 +42,7 @@ class advertisement extends controller {
 		} else {
 			$supplier_data = FALSE;
 		}
-		
+
 		$this->view->supplier_data = $supplier_data;
 		$this->view->supplier_list = user::getSupplierList("agent_id = '$agent_id'", "comp_name, supplier_id");
 
