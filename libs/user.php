@@ -13,14 +13,14 @@ class user {
 
 		return $data;
 	}
-	
+
 	public static function getSponsorData($type, $arg, $customData = "*") {
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
 
 		$data = $db->select("user_accounts", $customData, "$type = '$arg'", "fetch");
 
 		return $data;
-	}	
+	}
 
 	public static function getSupplierData($type, $arg) {
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
@@ -30,6 +30,14 @@ class user {
 		return $data;
 	}
 	
+	public static function getAdsData($type, $arg) {
+		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
+
+		$data = $db->select("advertisement_view", "*", "$type = '$arg'", "fetch");
+
+		return $data;
+	}
+
 	public static function getSupplierList($cond, $col = "*") {
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
 
@@ -45,24 +53,24 @@ class user {
 
 		return $data;
 	}
-	
+
 	public static function getRegPin() {
-		
+
 		$pinArr = array();
-		
+
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
-		$data = $db->select("user_accounts","agent_id","acc_type = 'ep' AND payment = '2' ORDER BY available_pin DESC");
-		
+		$data = $db->select("user_accounts", "agent_id", "acc_type = 'ep' AND payment = '2' ORDER BY available_pin DESC");
+
 		foreach ($data as $value) {
 			$pinArr[] = $value['agent_id'];
 		}
-		
+
 		if (count($pinArr) > 0) {
 			$pin = $pinArr[0];
-		}else {
+		} else {
 			$pin = "1000000";
 		}
-		
+
 		return $pin;
 	}
 
@@ -224,18 +232,34 @@ class user {
 
 		return $uid;
 	}
-	
+
 	public static function generateSupplierID() {
 
 		$uid = rand(1000000000, 9999999999);
 
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
-		$data = $db->count("user_suppliers", "agent_id = '$uid'");
+		$data = $db->count("user_suppliers", "supplier_id = '$uid'");
 
 		while ($data > 0) {
 
 			$uid = rand(1000000000, 9999999999);
-			$data = $db->count("user_suppliers", "agent_id = '$uid'");
+			$data = $db->count("user_suppliers", "supplier_id = '$uid'");
+		}
+
+		return $uid;
+	}
+	
+	public static function generateAdsID() {
+
+		$uid = rand(100000000, 999999999);
+
+		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
+		$data = $db->count("advertisement_view", "ads_id = '$uid'");
+
+		while ($data > 0) {
+
+			$uid = rand(100000000, 999999999);
+			$data = $db->count("advertisement_view", "ads_id = '$uid'");
 		}
 
 		return $uid;

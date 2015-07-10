@@ -10,7 +10,7 @@ $totalAgentSponsor = $this->totalAgentSponsor;
 
 $reminder = $this->reminder;
 
-$gps_amount = "RM 2,400";
+$gps_amount = "RM 2,800";
 ?>
 <div id="dashboard" class="col-xs-12">
     <h2 class="page-header">
@@ -197,11 +197,11 @@ $gps_amount = "RM 2,400";
                                     <td class="text-center">0</td>
                                 </tr>
                                 <tr>
-                                    <td width="200" class="text-right">Reseller Ads Pin Balance :</td>
+                                    <td width="200" class="text-right">Advertisement Pin Balance :</td>
                                     <td class="text-center"><?php echo $availablePin; ?></td>
                                 </tr>
                                 <tr>
-                                    <td width="200" class="text-right">Reseller Ads Pin Sold :</td>
+                                    <td width="200" class="text-right">Advertisement Pin Sold :</td>
                                     <td class="text-center"><a href="<?php echo BASE_PATH; ?>comm?type=apr&month=all"><?php echo $totalPinSold; ?> (RM <?php echo $totalPinSold*1200; ?>)</a></td>
                                 </tr>
                             </tbody>

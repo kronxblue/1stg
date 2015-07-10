@@ -19,34 +19,34 @@ $header_color = "active";
 		<div class="modal-content">
 		    <div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="ModalLabel">Phyto Science <span class="small">by Trandix Corp</span></h4>
+			<h4 class="modal-title" id="ModalLabel"><span id="ads_name">Phyto Science</span> <span id="comp_name" class="small">by Trandix Corp</span></h4>
 		    </div>
-		    <div class="modal-body">
+		    <div id="modal-body" class="modal-body">
 			<div class="col-md-6">
-			    <b>Day Left:</b> 133 days
+			    <b>Day Left:</b> <span id="day_left">-</span>
 			</div>
 			<div class="col-md-6">
-			    <b>Duration:</b> 12 month
+			    <b>Duration:</b> <span id="duration">-</span>
 			</div>
 			<div class="col-md-6">
 			    <b>Payment:</b><br/>
-			    RM 1,200
+			    <span id="payment">-</span>
 			</div>
 			<div class="col-md-6">
 			    <b>Commission:</b><br/>
-			    RM 600
+			    <span id="commission">-</span>
 			</div>
 			<div class="col-md-6">
 			    <b>Link:</b><br/>
-			    #
+			    <span id="link">-</span>
 			</div>
 			<div class="col-md-6">
-			    <b>Hash Tag:</b><br/>
-			    #adsWYW
+			    <b>FB Hash Tag:</b><br/>
+			    <span id="hashtag">-</span>
 			</div>
 			<div class="col-md-12">
 			    <b>Ads:</b><br/>
-			    <img src="<?php echo BASE_PATH; ?>public/images/ads/86/img_lg.jpg" width="100%"/>
+			    <span id="adsImg"><img src="<?php echo BASE_PATH; ?>public/images/ads/86/img_lg.jpg" width="100%"/></span>
 			</div>
 			<div class="clearfix"></div>
 		    </div>
@@ -56,14 +56,11 @@ $header_color = "active";
 		</div>
 	    </div>
 	</div>
-	<?php
-	echo $data['list'];
-	?>
 	<div id="searchAds" class="row">
             <div class="col-sm-4">
                 <div class="input-group input-group-sm">
                     <span class="input-group-addon"><i class="fa fa-search fa-fw"></i></span>
-                    <input type="text" id="s" name="s" class="form-control" placeholder="Search advertisement name" value="<?php echo isset($_REQUEST['s']) ? $_GET['s'] : NULL; ?>">
+                    <input type="text" id="s" name="s" class="form-control" placeholder="Search advertisement name / supplier ID" value="<?php echo isset($_REQUEST['s']) ? $_GET['s'] : NULL; ?>">
                     <span class="input-group-btn">
 			<?php
 			echo isset($_REQUEST['s']) ? "<a id='btnClear' class='btn btn-danger' href='" . BASE_PATH . "advertisement'>Clear search <i class='fa fa-times fa-fw'></i></a>" : NULL;
@@ -77,45 +74,9 @@ $header_color = "active";
         </div>
         <br/>
         <div id="adsList" class="table-responsive" data-url="<?php echo BASE_PATH; ?>advertisement/ajaxAdsList" data-spec="<?php echo $supplier_data; ?>">
-            <table class="table table-bordered table-condensed">
-                <thead>
-                    <tr>
-                        <th class="text-center" width="50px">#</th>
-                        <th class="text-center" width="150px">Ads ID</th>
-                        <th class="text-center" width="150px">Ads Pin</th>
-                        <th class="text-center" >Supplier Name</th>
-                        <th class="text-center" >Ads Name</th>
-                        <th class="text-center" width="150px">Document Date</th>
-                        <th class="text-center" width="150px">Receive Date</th>
-                        <th class="text-center" width="150px">Status</th>
-                        <th class="text-center" width="150px">Start Date</th>
-                        <th class="text-center" width="150px">Expiry Date</th>
-                        <th class="text-center" width="300px"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="text-center">
-                        <td>1</td>
-                        <td>902983728</td>
-                        <td>N/A</td>
-                        <td><a href="advertisement?sid=1109299050">Trandix Corp</a></td>
-                        <td>Phyto Science</td>
-                        <td>30 May 2015</td>
-                        <td>31 May 2015</td>
-                        <td>Designing</td>
-                        <td>21 May 2015</td>
-                        <td>21 May 2016</td>
-                        <td id="details">
-			    <!--<a class="btn btn-link btn-details-toggle" href="#">Details</a>-->
-			    <button type="button" class="btn btn-primary btn-sm btn-details-toggles" data-toggle="modal" data-target="#detailsModal">
-				Details
-			    </button>
-			</td>
-                    </tr>
-                </tbody>
-            </table>
-
-
+	    <?php
+	    echo $data['list'];
+	    ?>
         </div>
 	<?php if (isset($_REQUEST['sid'])) { ?>
 		<a class="btn btn-primary btn-sm" href="<?php echo BASE_PATH; ?>advertisement"><i class="fa fa-fw fa-list-alt"></i> View all advertisement</a>

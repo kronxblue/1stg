@@ -95,7 +95,7 @@ class supplier_model extends model {
 		$listExist = user::checkExist("user_suppliers", "agent_id = '$agent_id'");
 
 		if (!$listExist) {
-			$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
+			$content .= "<tr><td class ='text-center' colspan='9'>No supplier record.</td></tr>";
 		} else {
 
 			if (isset($_REQUEST['s'])) {
@@ -182,7 +182,7 @@ class supplier_model extends model {
 
 
 			if ($total_row == 0) {
-				$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
+				$content .= "<tr><td class ='text-center' colspan='9'>No supplier record.</td></tr>";
 				$pagination = NULL;
 			} else {
 

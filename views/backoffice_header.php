@@ -221,6 +221,9 @@ $active = "active";
                                 <li>
                                     <a href="<?php echo BASE_PATH; ?>management/agentCommission"><i class="fa fa-briefcase fa-fw"></i> Agent Commission</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo BASE_PATH; ?>management/supplier"><i class="fa fa-briefcase fa-fw"></i> Supplier List</a>
+                                </li>
                             </ul>
                         </li>
                     <?php } ?>
@@ -252,7 +255,7 @@ $active = "active";
                                 <a href="<?php echo BASE_PATH; ?>supplier"><i class="fa fa-ticket fa-fw"></i> Supplier List</a>
                             </li>
                             <li>
-                                <a class="unavailable-link" href="#"><i class="fa fa-certificate fa-fw"></i> Advertisement</a>
+                                <a href="<?php echo BASE_PATH ?>advertisement"><i class="fa fa-certificate fa-fw"></i> Advertisement</a>
                             </li>
                         </ul>
                     </li>

@@ -30,6 +30,14 @@ class advertisement_model extends model {
 	public function advertisementList() {
 		$self_address = BASE_PATH . "advertisement";
 
+		if (!isset($_REQUEST['s'])) {
+			$_GET['s'] = NULL;
+		}
+		if (!isset($_REQUEST['p'])) {
+			$_GET['p'] = 1;
+		}
+
+
 		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='150px'>Ads ID</th><th class='text-center' width='150px'>Ads Pin</th><th class='text-center' >Supplier Name</th><th class='text-center' >Ads Name</th><th class='text-center' width='150px'>Document Date</th><th class='text-center' width='150px'>Receive Date</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='150px'>Start Date</th><th class='text-center' width='150px'>Expiry Date</th><th class='text-center' width='300px'></th></tr></thead><tbody>";
 		$content = "";
 		$pagination = "";
@@ -48,7 +56,7 @@ class advertisement_model extends model {
 
 				if ($_GET['s'] != "") {
 					$searchItm = $s;
-					$searchSQL = " AND (ads_name LIKE '%$searchItm%') OR (supplier_id LIKE '%$searchItm%')";
+					$searchSQL = " AND (ads_name LIKE '%$searchItm%') OR (supplier_id LIKE '%$searchItm%') OR (ads_id LIKE '%$searchItm%')";
 					$get_search = "&s=$searchItm";
 				} else {
 					$searchItm = NULL;
@@ -72,13 +80,20 @@ class advertisement_model extends model {
 
 			$from = (($current_page * $max_result) - $max_result);
 
-			if ($searchItm == NULL) {
-				$supplierList_full = $this->db->select("advertisement_view", "*", "agent_id = '$agent_id' ORDER BY id DESC");
+			if (!isset($_REQUEST['sid'])) {
+				$cond = "agent_id = '$agent_id'";
 			} else {
-				$supplierList_full = $this->db->select("advertisement_view", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC");
+				$sid = $_GET['sid'];
+				$cond = "agent_id = '$agent_id' AND supplier_id = '$sid'";
+			}
+
+			if ($searchItm == NULL) {
+				$advertisementList_full = $this->db->select("advertisement_view", "*", "$cond ORDER BY id DESC");
+			} else {
+				$advertisementList_full = $this->db->select("advertisement_view", "*", "$cond $searchSQL ORDER BY id DESC");
 			}
 //
-			$total_row = count($supplierList_full);
+			$total_row = count($advertisementList_full);
 
 
 			$total_pages = ceil($total_row / $max_result);
@@ -119,14 +134,14 @@ class advertisement_model extends model {
 
 
 			if ($searchItm == NULL) {
-				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' ORDER BY id DESC LIMIT $from,$max_result");
+				$advertisementList_limit = $this->db->select("advertisement_view", "*", "$cond ORDER BY id DESC LIMIT $from,$max_result");
 			} else {
-				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC LIMIT $from,$max_result");
+				$advertisementList_limit = $this->db->select("advertisement_view", "*", "$cond $searchSQL ORDER BY id DESC LIMIT $from,$max_result");
 			}
 
 
 			if ($total_row == 0) {
-				$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
+				$content .= "<tr><td class ='text-center' colspan='11'>No advertisement record.</td></tr>";
 				$pagination = NULL;
 			} else {
 
@@ -136,62 +151,41 @@ class advertisement_model extends model {
 
 				$x = $from + 1;
 
-				foreach ($supplierList_limit as $value) {
+				foreach ($advertisementList_limit as $value) {
 
 
 //                CONSTRUCT CONTENT
-					$supplier_id = $value['supplier_id'];
-					$name = ucwords(strtolower($value['comp_name']));
+					$ads_id = $value['ads_id'];
+					$ads_pin = ($value['ads_pin']) ? "Yes" : "No";
 
-					$categotyData = $this->db->select("category", "*", "id = '" . $value['category'] . "'", "fetch");
-					$category = $categotyData['category'] . " - " . $categotyData['subcategory'];
+					$supplier_data = user::getSupplierData("supplier_id", $value['supplier_id']);
+					$supplier_name = "<a href='" . BASE_PATH . "supplier?s=" . $supplier_data['comp_name'] . "'>" . $supplier_data['comp_name'] . "</a>";
 
-					if ($value['comp_state'] == "oth") {
-						$state = $value['state_other'];
-					} else {
-						$stateData = user::getStates($value['comp_country']);
-						$statesArr = $stateData[0]['states'];
-						$statesArr = json_decode($statesArr);
-						$statesArr = get_object_vars($statesArr);
+					$ads_name = $value['ads_name'];
 
-						foreach ($statesArr as $key2 => $value2) {
-							if ($key2 == $value['comp_state']) {
-								$state = $value2;
-							}
-						}
-					}
+					$doc_date =($value['date_doc'] != NULL) ? date("d M Y", strtotime($value['date_doc'])) : "N/A";
+					$receive_date = ($value['date_receive'] != NULL) ? date("d M Y", strtotime($value['date_receive'])) : "N/A";
 
-					$country = $this->db->select("country", "*", "code = '" . $value['comp_country'] . "'", "fetch");
+					$ads_status = $value['ads_status'];
 
-					$stateCountry = $state . ", " . $country['name'];
+					$date_start = ($value['date_start'] != NULL) ? date("d M Y", strtotime($value['date_start'])) : "N/A";
+					$date_end = ($value['date_end'] != NULL) ? date("d M Y", strtotime($value['date_end'])) : "N/A";
 
-					$descLenght = strlen($value['desc']);
-					if ($descLenght > 50) {
-						$desc = "<span class='desc'>" . substr($value['desc'], 0, 50) . "... </span>";
-						$desc .= "<a class='btn btn-xs btn-info btn-more-desc' href='$self_address/ajaxSupplierDesc' data-view='0' data-supplier='$supplier_id' title='Read more'><i class='fa fa-angle-down fa-fw'></i></a>";
-					} else {
-						$desc = "<span class='desc'>" . $value['desc'] . "</span>";
-					}
-
-					$count_ads = $this->db->count("advertisement_view", "supplier_id = $supplier_id");
-					$ads_count = "<a class='btn btn-xs btn-link' href='" . BASE_PATH . "advertisement?sid=$supplier_id' title='View all advertisement from this supplier.'>$count_ads</a>";
-					$btn_newAds = "<a class='btn btn-xs btn-link unavailable-link' href='" . BASE_PATH . "advertisement/addNew?sid=$supplier_id' title='Add new advertisement for this supplier.'><i class='fa fa-plus-square fa-fw'></i> Add</a>";
-					$total_ads = $ads_count . " | " . $btn_newAds;
-
-					$status = ($value['status'] == 0) ? "<span class='text-danger'>Waiting to verify</span>" : "<span class='text-success'>Verified</span>";
-
-					$action = "<div class='col-xs-12'><a class='btn btn-xs btn-info' href='$self_address/details?sid=$supplier_id' title='View supplier details.'><i class='fa fa-file-text fa-fw'></i> Details</a></div>";
+					$action = "<button type='button' class='btn btn-primary btn-xs btn-details-toggles' data-toggle='modal' data-target='#detailsModal' data-adsid='$ads_id' data-url='$self_address/ajaxAdsDetails'><i class='fa fa-file-text fa-fw'></i> Details</button>";
 
 					$content .= "<tr class='text-center'>";
 
 					$content .= "<td>$x</td>";
-					$content .= "<td>$name</td>";
-					$content .= "<td>$category</td>";
-					$content .= "<td>$stateCountry</td>";
-					$content .= "<td>$desc</td>";
-					$content .= "<td>$total_ads</td>";
-					$content .= "<td>$status</td>";
-					$content .= "<td>$action</td>";
+					$content .= "<td>$ads_id</td>";
+					$content .= "<td>$ads_pin</td>";
+					$content .= "<td>$supplier_name</td>";
+					$content .= "<td>$ads_name</td>";
+					$content .= "<td>$doc_date</td>";
+					$content .= "<td>$receive_date</td>";
+					$content .= "<td>$ads_status</td>";
+					$content .= "<td>$date_start</td>";
+					$content .= "<td>$date_end</td>";
+					$content .= "<td class='details'>$action</td>";
 
 					$content .= "</tr>";
 					$x++;
@@ -298,186 +292,20 @@ class advertisement_model extends model {
 		return $response_array;
 	}
 
-	public function ajaxAdsList() {
+	public function ajaxAdsDetails($ads_id) {
 
-		$self_address = BASE_PATH . "advertisement";
+		$ads_data = user::getAdsData("ads_id", "$ads_id");
 
-		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='250px'>Name</th><th class='text-center' width='150px'>Category</th><th class='text-center' width='150px'>State, Country</th><th class='text-center' width='300px'>Business Desc</th><th class='text-center' width='150px'>Advertisement</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='250px'>Action</th></tr></thead><tbody>";
-		$content = "";
-		$pagination = "";
+		$data = array();
+		$data['day_left'] = floor((strtotime($ads_data['date_end']) - time()) / (60 * 60 * 24)) . " days";
+		$data['period'] = $ads_data['period'] . " month";
+		$data['payment'] = "RM " . number_format($ads_data['payment']);
+		$data['commission'] = "RM " . number_format($ads_data['commission']);
+		$data['link'] = ($ads_data['link'] != "#") ? "<a target='_blank' href='" . $ads_data['link'] . "'>" . $ads_data['link'] . "</a>" : "#";
+		$data['hashtag'] = ($ads_data['hashtag'] != NULL) ? "<a target='_blank' href='https://www.facebook.com/hashtag/" . $ads_data['hashtag'] . "'>" . $ads_data['hashtag'] . "</a>" : "N/A";
+		$data['adsImg'] = ($ads_data['img_lg'] != NULL) ? "<img src='". BASE_PATH . "public/images/ads/" . $ads_data['id'] . "/" . $ads_data['img_lg'] ."' width='100%'/>" : "This advertisement is not ready for viewing.";
 
-		$agent_id = session::get(AGENT_SESSION_NAME);
-
-		$listExist = user::checkExist("user_suppliers", "agent_id = '$agent_id'");
-
-		if (!$listExist) {
-			$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
-		} else {
-
-			if (isset($_REQUEST['s'])) {
-
-				$s = $_GET['s'];
-
-				if ($_GET['s'] != "") {
-					$searchItm = $s;
-					$searchSQL = " AND (comp_name LIKE '%$searchItm%')";
-					$get_search = "&s=$searchItm";
-				} else {
-					$searchItm = NULL;
-					$searchSQL = NULL;
-					$get_search = NULL;
-				}
-			} else {
-				$searchItm = NULL;
-				$searchSQL = NULL;
-				$get_search = NULL;
-			}
-
-			$page = $_GET['p'];
-
-			$current_page = $page;
-
-			$prev_page = ($current_page - 1);
-			$next_page = ($current_page + 1);
-
-			$max_result = 15;
-
-			$from = (($current_page * $max_result) - $max_result);
-
-			if ($searchItm == NULL) {
-				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' ORDER BY id DESC");
-			} else {
-				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC");
-			}
-//
-			$total_row = count($supplierList_full);
-
-
-			$total_pages = ceil($total_row / $max_result);
-
-			$pagination .= "<ul class='pagination pagination-sm'>";
-
-			if ($current_page > 1) {
-				$pagination .= "<li><a href='$self_address?p=$prev_page$get_search'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
-			} else {
-				$pagination .= "<li class='disabled'><a href='#'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
-			}
-
-			if ($current_page >= 7) {
-				$pagination .= "<li><a href='$self_address?p=1$get_search'>1</a></li>";
-				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
-			}
-
-			for ($i = max(1, $current_page - 5); $i <= min($current_page + 5, $total_pages); $i++) {
-				if (($current_page) == $i) {
-					$pagination .= "<li class='active'><a href='#'>$i</a></li>";
-				} else {
-					$pagination .= "<li><a href='$self_address?p=$i$get_search'>$i</a></li>";
-				}
-			}
-
-			if ($current_page < $total_pages - 5) {
-				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
-				$pagination .= "<li><a href='$self_address?p=$total_pages$get_search'>$total_pages</a></li>";
-			}
-
-			if ($current_page < $total_pages) {
-				$pagination .= "<li><a href='$self_address?p=$next_page$get_search'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
-			} else {
-				$pagination .= "<li class='disabled'><a href='#'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
-			}
-
-			$pagination .= "</ul>";
-
-
-			if ($searchItm == NULL) {
-				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' ORDER BY id DESC LIMIT $from,$max_result");
-			} else {
-				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id = '$agent_id' $searchSQL ORDER BY id DESC LIMIT $from,$max_result");
-			}
-
-
-			if ($total_row == 0) {
-				$content .= "<tr><td class ='text-center' colspan='8'>No supplier record.</td></tr>";
-				$pagination = NULL;
-			} else {
-
-				if ($total_row <= $max_result) {
-					$pagination = NULL;
-				}
-
-				$x = $from + 1;
-
-				foreach ($supplierList_limit as $value) {
-
-
-//                CONSTRUCT CONTENT
-					$supplier_id = $value['supplier_id'];
-					$name = ucwords(strtolower($value['comp_name']));
-
-					$categotyData = $this->db->select("category", "*", "id = '" . $value['category'] . "'", "fetch");
-					$category = $categotyData['category'] . " - " . $categotyData['subcategory'];
-
-					if ($value['comp_state'] == "oth") {
-						$state = $value['state_other'];
-					} else {
-						$stateData = user::getStates($value['comp_country']);
-						$statesArr = $stateData[0]['states'];
-						$statesArr = json_decode($statesArr);
-						$statesArr = get_object_vars($statesArr);
-
-						foreach ($statesArr as $key2 => $value2) {
-							if ($key2 == $value['comp_state']) {
-								$state = $value2;
-							}
-						}
-					}
-
-					$country = $this->db->select("country", "*", "code = '" . $value['comp_country'] . "'", "fetch");
-
-					$stateCountry = $state . ", " . $country['name'];
-
-					$descLenght = strlen($value['desc']);
-					if ($descLenght > 50) {
-						$desc = "<span class='desc'>" . substr($value['desc'], 0, 50) . "... </span>";
-						$desc .= "<a class='btn btn-xs btn-info btn-more-desc' href='$self_address/ajaxSupplierDesc' data-view='0' data-supplier='$supplier_id' title='Read more'><i class='fa fa-angle-down fa-fw'></i></a>";
-					} else {
-						$desc = "<span class='desc'>" . $value['desc'] . "</span>";
-					}
-
-					$count_ads = $this->db->count("advertisement_view", "supplier_id = $supplier_id");
-					$ads_count = "<a class='btn btn-xs btn-link' href='" . BASE_PATH . "advertisement?sid=$supplier_id' title='View all advertisement from this supplier.'>$count_ads</a>";
-					$btn_newAds = "<a class='btn btn-xs btn-link unavailable-link' href='" . BASE_PATH . "advertisement/addNew?sid=$supplier_id' title='Add new advertisement for this supplier.'><i class='fa fa-plus-square fa-fw'></i> Add</a>";
-					$total_ads = $ads_count . " | " . $btn_newAds;
-
-					$status = ($value['status'] == 0) ? "<span class='text-danger'>Waiting to verify</span>" : "<span class='text-success'>Verified</span>";
-
-					$action = "<div class='col-xs-12'><a class='btn btn-xs btn-info' href='$self_address/details?sid=$supplier_id' title='View supplier details.'><i class='fa fa-file-text fa-fw'></i> Details</a></div>";
-
-					$content .= "<tr class='text-center'>";
-
-					$content .= "<td>$x</td>";
-					$content .= "<td>$name</td>";
-					$content .= "<td>$category</td>";
-					$content .= "<td>$stateCountry</td>";
-					$content .= "<td>$desc</td>";
-					$content .= "<td>$total_ads</td>";
-					$content .= "<td>$status</td>";
-					$content .= "<td>$action</td>";
-
-					$content .= "</tr>";
-					$x++;
-				}
-			}
-		}
-
-		$footer = "</tbody></table>";
-
-		$result = $header . $content . $footer . $pagination;
-
-
-
-		return $result;
+		return $data;
 	}
 
 }

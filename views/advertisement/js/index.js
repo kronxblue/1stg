@@ -1,50 +1,38 @@
 $(document).ready(function () {
 
-    $("#advertisement").on("click", ".btn-details-toggle", function () {
+    $("#detailsModal").on("show.bs.modal", function (event) {
+        var btnDetails = $(event.relatedTarget);
 
-        var currentElement = $(this);
 
-        var url = $(this).attr("data-url");
-        var viewData = $(this).attr("data-view");
-        var adsId = $(this).attr("data-id");
+        var url = btnDetails.data("url");
         var data = {
-            "view": viewData,
-            "ads_id": adsId
+            "ads_id": btnDetails.data("adsid")
         };
 
-        currentElement.parent('td').children('.details-toggle').toggle('blind', 300);
+        $.post(url, data, function (o) {
+            var result = JSON.parse(o);
+            
+            fillDetails(result);
+        });
 
-        return false;
+
     });
-    
-    $("#advertisement").on("click","#btnSearch", function(){
+
+    $("#advertisement").on("click", "#btnSearch", function () {
         var url = $(this).attr("data-url");
         var data = $("#s").val();
         window.location = url + data;
     });
 
-//    advertisementList();
-
 });
 
-function advertisementList() {
-    var parentObj = $("#adsList");
-
-    var url = parentObj.attr("data-url");
-    var p = $("#p").val();
-    var spec = parentObj.attr("data-spec");
-    
-    console.log(spec);
-
-    var data = {
-        "p": p,
-        "spec": spec
-    };
-
-    $.get(url, data, function (o) {
-//        $("#supplierList").html(o);
-
-//        console.log(o);
-        
-    }, 'json');
+function fillDetails(data) {
+    var modalObj = $("#modal-body");
+    var day_left = modalObj.children("div").children("#day_left").html(data.day_left);
+    var day_left = modalObj.children("div").children("#duration").html(data.period);
+    var day_left = modalObj.children("div").children("#payment").html(data.payment);
+    var day_left = modalObj.children("div").children("#commission").html(data.commission);
+    var day_left = modalObj.children("div").children("#link").html(data.link);
+    var day_left = modalObj.children("div").children("#hashtag").html(data.hashtag);
+    var day_left = modalObj.children("div").children("#adsImg").html(data.adsImg);
 }

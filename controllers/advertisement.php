@@ -22,7 +22,7 @@ class advertisement extends controller {
 
 			$this->breadcrumb->add($supplier_data['comp_name'], "advertisement");
 		} else {
-			$data['title'] = "Summary";
+			$data['title'] = "All advertisement";
 			$supplier_data = FALSE;
 		}
 
@@ -123,9 +123,11 @@ class advertisement extends controller {
 		echo json_encode($response_array);
 	}
 
-	function ajaxAdsList() {
+	function ajaxAdsDetails() {
+		
+		$ads_id = $_POST['ads_id'];
 
-		$result = $this->model->ajaxAdsList();
+		$result = $this->model->ajaxAdsDetails($ads_id);
 
 		echo json_encode($result);
 	}
