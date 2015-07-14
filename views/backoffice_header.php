@@ -224,6 +224,9 @@ $active = "active";
                                 <li>
                                     <a href="<?php echo BASE_PATH; ?>management/supplier"><i class="fa fa-briefcase fa-fw"></i> Supplier List</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo BASE_PATH; ?>management/advertisement"><i class="fa fa-briefcase fa-fw"></i> Ads List</a>
+                                </li>
                             </ul>
                         </li>
                     <?php } ?>

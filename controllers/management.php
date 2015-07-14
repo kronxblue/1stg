@@ -330,4 +330,162 @@ class management extends controller {
 		echo json_encode($response_array);
 	}
 
+	function supplier() {
+		$has_alert = (isset($_GET['r'])) ? $_GET['r'] : FALSE;
+		$text = FALSE;
+
+		if ($has_alert != FALSE) {
+			$type = (isset($_GET['t'])) ? $_GET['t'] : FALSE;
+			$arg = (isset($_GET['a'])) ? user::getSupplierData("token", $_GET['a']) : redirect::to("supplier");
+
+
+			switch ($has_alert) {
+				case "success":
+					$text = "You have successfully ";
+					break;
+				case "danger":
+					$text = "Sorry, you have failed to ";
+					break;
+				default:
+					redirect::to("supplier");
+					break;
+			}
+
+			switch ($type) {
+				case "addnew":
+					$text .= "add new free supplier : <b>" . $arg['comp_name'] . "</b>";
+					break;
+
+				default:
+					redirect::to("supplier");
+					break;
+			}
+		}
+		$this->view->alert = $has_alert;
+		$this->view->alert_text = $text;
+
+		$monthList = $this->model->monthList();
+		$this->view->monthList = $monthList;
+
+		$this->breadcrumb->add("Supplier List", "management/supplier");
+		$this->view->breadcrumbs = $this->breadcrumb->get();
+		$this->view->js = array('management/js/supplier.js');
+		$this->view->render('management/supplier', 'backoffice');
+	}
+
+	function addSupplier() {
+
+		$this->view->categoryList = user::getCategory();
+		$this->view->countryList = user::getCountry();
+		$this->view->statesList = user::getStates("MY");
+		$this->view->agentList = user::getAgentList("agent_id != 'NULL' ORDER BY username ASC", "agent_id, available_pin, username");
+
+		$this->breadcrumb->add("Add New Supplier", "supplier/addNew");
+		$this->view->breadcrumbs = $this->breadcrumb->get();
+		$this->view->js = array('management/js/addSupplier.js');
+		$this->view->render('management/addSupplier', 'backoffice');
+	}
+
+	function addSupplier_exec() {
+
+		$response_array = array();
+
+		try {
+			$form = new form();
+			$form->post('agent_id')
+				->val('Agent', 'minlength')
+				->post('comp_name')
+				->val('Individual / Company Name', 'minlength')
+				->post('comp_reg_no')
+				->post('comp_address')
+				->val('Address', 'minlength')
+				->post('comp_postcode')
+				->val('Poscode', 'minlength')
+				->post('comp_state')
+				->val('State', 'minlength')
+				->post('state_other')
+				->val('State', 'minlength')
+				->post('comp_country')
+				->val('Country', 'minlength')
+				->post('comp_phone1')
+				->val('Phone 1', 'minlength')
+				->post('comp_phone2')
+				->post('comp_fax')
+				->post('website')
+				->post('category')
+				->val('Category', 'minlength')
+				->post('tag')
+				->val('Keyword Tag', 'minlength')
+				->post('desc')
+				->val('Description', 'minlength')
+				->post('salutation')
+				->val('Salutation', 'minlength')
+				->post('p_fullname')
+				->val('Fullname', 'minlength')
+				->post('p_pos')
+				->post('p_phone')
+				->post('p_mobile')
+				->val('Mobile No.', 'minlength')
+				->post('p_gender')
+				->val('Gender', 'minlength')
+				->post('comp_email')
+				->val('Email', 'minlength')
+				->post('regdate');
+
+			$form->submit();
+
+			$data = $form->fetch();
+
+			$result = $this->model->addSupplier_exec($data);
+
+
+			$response_array['r'] = $result['r'];
+			$response_array['msg'] = $result['msg'];
+		} catch (Exception $e) {
+
+			$response_array['r'] = 'false';
+			$response_array['msg'] = $e->getMessage();
+		}
+
+		echo json_encode($response_array);
+	}
+	
+	function ajaxSupplierList() {
+
+		$result = $this->model->ajaxSupplierList();
+
+		echo json_encode($result);
+	}
+	
+	function advertisement() {
+		$data = array();
+		$data['list'] = $this->model->advertisementList();
+
+		if (isset($_REQUEST['sid'])) {
+			$supplier_id = $_GET['sid'];
+			$supplier_data = user::getSupplierData("supplier_id", $supplier_id);
+			$data['title'] = $supplier_data['comp_name'];
+
+			$this->breadcrumb->add($supplier_data['comp_name'], "advertisement");
+		} else {
+			$data['title'] = "All advertisement";
+			$supplier_data = FALSE;
+		}
+
+		$this->view->data = $data;
+
+		$this->view->breadcrumbs = $this->breadcrumb->get();
+		$this->view->js = array('management/js/advertisement.js');
+		$this->view->render('management/advertisement', 'backoffice');
+	}
+	
+	function ajaxAdsDetails() {
+		
+		$ads_id = $_POST['ads_id'];
+
+		$result = $this->model->ajaxAdsDetails($ads_id);
+
+		echo json_encode($result);
+	}
+
 }

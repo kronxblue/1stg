@@ -488,7 +488,7 @@ class management_model extends model {
 
 		$redirectLink = BASE_PATH . "management/payment";
 		if ($data['status'] == 2) {
-			
+
 			$payment_details = $this->db->select("user_payment", "id, agent_id, amount, payment_type, payment_for", "id = '$payment_id'", "fetch");
 
 			$username = ucwords($userdata['username']);
@@ -1119,6 +1119,444 @@ class management_model extends model {
 		}
 
 		return $response_array;
+	}
+
+	public function addSupplier_exec($data) {
+		$response_array = array();
+
+		$data['agent_id'] = $data['agent_id'];
+		$data['supplier_id'] = user::generateSupplierID();
+
+		$data['comp_name'] = ucwords($data['comp_name']);
+		$data['comp_reg_no'] = strtoupper($data['comp_reg_no']);
+		$data['comp_address'] = ucwords($data['comp_address']);
+
+		if ($data['comp_state'] != "oth") {
+			unset($data['state_other']);
+		}
+
+		$data['token'] = hash::create("sha256", $data['supplier_id'], $data['comp_email']);
+
+
+		$data['website'] = strtolower($data['website']);
+		$data['website'] = str_replace("http://", "", $data['website']);
+		$data['website'] = str_replace("https://", "", $data['website']);
+
+		$data['tag'] = strtolower(str_replace(", ", ",", $data['tag']));
+		$data['p_fullname'] = ucwords(strtolower($data['p_fullname']));
+		$data['p_pos'] = ucwords(strtolower($data['p_pos']));
+
+		$agent_id = $data['agent_id'];
+
+		for ($x = 1; $x <= 5; $x++) {
+			$userID = $this->db->select("user_accounts", "sponsor_id", "agent_id = $agent_id", "fetch");
+
+			$agent_id = $userID['sponsor_id'];
+			$data['lv' . $x] = $agent_id;
+		}
+
+		foreach ($data as $key => $value) {
+			if ($value == "") {
+				$data[$key] = NULL;
+			}
+		}
+
+		$insert = $this->db->insert("user_suppliers", $data);
+
+		if (!$insert) {
+			$response_array['r'] = "false";
+			$response_array['msg'] = "Oopps! Looks like there is some technical error while process your supplier registration. Please re-submit the form or refresh your browser.";
+		} else {
+
+			$response_array['r'] = "true";
+			$response_array['msg'] = BASE_PATH . "management/supplier?r=success&t=addnew&a=" . $data['token'];
+		}
+
+
+		return $response_array;
+	}
+
+	public function ajaxSupplierList() {
+
+		$self_address = BASE_PATH . "management/supplier";
+
+		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='150px'>Agent ID</th><th class='text-center' width='150px'>Supplier ID</th><th class='text-center' width='100px'>Type</th><th class='text-center' width='250px'>Supplier Name</th><th class='text-center' width='150px'>Category</th><th class='text-center' width='150px'>State, Country</th><th class='text-center' width='150px'>Advertisement</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='250px'>Action</th></tr></thead><tbody>";
+		$content = "";
+		$pagination = "";
+
+		$listExist = user::checkExist("user_suppliers");
+
+		if (!$listExist) {
+			$content .= "<tr><td class ='text-center' colspan='9'>No supplier record.</td></tr>";
+		} else {
+
+			if (isset($_REQUEST['s'])) {
+
+				$s = $_GET['s'];
+
+				if ($_GET['s'] != "") {
+					$searchItm = $s;
+					$searchSQL = " AND (comp_name LIKE '%$searchItm%')";
+					$get_search = "&s=$searchItm";
+				} else {
+					$searchItm = NULL;
+					$searchSQL = NULL;
+					$get_search = NULL;
+				}
+			} else {
+				$searchItm = NULL;
+				$searchSQL = NULL;
+				$get_search = NULL;
+			}
+
+			$page = $_GET['p'];
+
+			$current_page = $page;
+
+			$prev_page = ($current_page - 1);
+			$next_page = ($current_page + 1);
+
+			$max_result = 15;
+
+			$from = (($current_page * $max_result) - $max_result);
+
+			if ($searchItm == NULL) {
+				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id != 'NULL' ORDER BY id DESC");
+			} else {
+				$supplierList_full = $this->db->select("user_suppliers", "*", "agent_id != 'NULL' $searchSQL ORDER BY id DESC");
+			}
+//
+			$total_row = count($supplierList_full);
+
+
+			$total_pages = ceil($total_row / $max_result);
+
+			$pagination .= "<ul class='pagination pagination-sm'>";
+
+			if ($current_page > 1) {
+				$pagination .= "<li><a href='$self_address?p=$prev_page$get_search'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
+			} else {
+				$pagination .= "<li class='disabled'><a href='#'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
+			}
+
+			if ($current_page >= 7) {
+				$pagination .= "<li><a href='$self_address?p=1$get_search'>1</a></li>";
+				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
+			}
+
+			for ($i = max(1, $current_page - 5); $i <= min($current_page + 5, $total_pages); $i++) {
+				if (($current_page) == $i) {
+					$pagination .= "<li class='active'><a href='#'>$i</a></li>";
+				} else {
+					$pagination .= "<li><a href='$self_address?p=$i$get_search'>$i</a></li>";
+				}
+			}
+
+			if ($current_page < $total_pages - 5) {
+				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
+				$pagination .= "<li><a href='$self_address?p=$total_pages$get_search'>$total_pages</a></li>";
+			}
+
+			if ($current_page < $total_pages) {
+				$pagination .= "<li><a href='$self_address?p=$next_page$get_search'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
+			} else {
+				$pagination .= "<li class='disabled'><a href='#'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
+			}
+
+			$pagination .= "</ul>";
+
+
+			if ($searchItm == NULL) {
+				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id != 'NULL' ORDER BY id DESC LIMIT $from,$max_result");
+			} else {
+				$supplierList_limit = $this->db->select("user_suppliers", "*", "agent_id != 'NULL' $searchSQL ORDER BY id DESC LIMIT $from,$max_result");
+			}
+
+
+			if ($total_row == 0) {
+				$content .= "<tr><td class ='text-center' colspan='9'>No supplier record.</td></tr>";
+				$pagination = NULL;
+			} else {
+
+				if ($total_row <= $max_result) {
+					$pagination = NULL;
+				}
+
+				$x = $from + 1;
+
+				foreach ($supplierList_limit as $value) {
+
+
+//                CONSTRUCT CONTENT
+					$agent_id = $value['agent_id'];
+					$agent = user::getUserData("agent_id", $agent_id);
+
+					$supplier_id = $value['supplier_id'];
+
+					switch ($value['type']) {
+						case 1:
+							$type = "Paid";
+							$color = "bg-highlight";
+							break;
+
+						default:
+							$type = "Free";
+							$color = NULL;
+							break;
+					}
+
+					$name = ucwords(strtolower($value['comp_name']));
+
+					$categotyData = $this->db->select("category", "*", "id = '" . $value['category'] . "'", "fetch");
+					$category = $categotyData['category'] . " - " . $categotyData['subcategory'];
+
+					if ($value['comp_state'] == "oth") {
+						$state = $value['state_other'];
+					} else {
+						$stateData = user::getStates($value['comp_country']);
+						$statesArr = $stateData[0]['states'];
+						$statesArr = json_decode($statesArr);
+						$statesArr = get_object_vars($statesArr);
+
+						foreach ($statesArr as $key2 => $value2) {
+							if ($key2 == $value['comp_state']) {
+								$state = $value2;
+							}
+						}
+					}
+
+					$country = $this->db->select("country", "*", "code = '" . $value['comp_country'] . "'", "fetch");
+
+					$stateCountry = $state . ", " . $country['name'];
+
+					$count_ads = $this->db->count("advertisement_view", "supplier_id = $supplier_id");
+					$ads_count = "<a class='btn btn-xs btn-link' href='" . BASE_PATH . "management/advertisement?sid=$supplier_id&aid=$agent_id' title='View all advertisement from this supplier.'>$count_ads</a>";
+					$add_ads_btn = "<a class='btn btn-xs btn-link unavailable-link' href='" . BASE_PATH . "management/addAds?sid=$supplier_id' title='Add advertisement for this supplier.'><i class='fa fa-plus-square fa-fw'></i> Add</a>";
+					$total_ads = $ads_count . " | " . $add_ads_btn;
+
+					$status = ($value['status'] == 0) ? "<span class='text-danger'>Waiting to verify</span>" : "<span class='text-success'>Verified</span>";
+
+					$action = "<div class='col-xs-12'><a class='btn btn-xs btn-info unavailable-link' href='" . BASE_PATH . "management/supplierDetails?sid=$supplier_id' title='View supplier details.'><i class='fa fa-file-text fa-fw'></i> Details</a> <a class='btn btn-xs btn-warning unavailable-link' href='" . BASE_PATH . "management/updateSupplier?sid=$supplier_id' title='Update supplier details.'><i class='fa fa-edit fa-fw'></i> Update</a></div>";
+
+					$content .= "<tr class='text-center $color'>";
+
+					$content .= "<td>$x</td>";
+					$content .= "<td>" . $agent['username'] . "</td>";
+					$content .= "<td>$supplier_id</td>";
+					$content .= "<td>$type</td>";
+					$content .= "<td>$name</td>";
+					$content .= "<td>$category</td>";
+					$content .= "<td>$stateCountry</td>";
+					$content .= "<td>$total_ads</td>";
+					$content .= "<td>$status</td>";
+					$content .= "<td>$action</td>";
+
+					$content .= "</tr>";
+					$x++;
+				}
+			}
+		}
+
+		$footer = "</tbody></table>";
+
+		$result = $header . $content . $footer . $pagination;
+
+
+
+		return $result;
+	}
+
+	public function advertisementList() {
+		$self_address = BASE_PATH . "management/advertisement";
+
+		if (!isset($_REQUEST['s'])) {
+			$_GET['s'] = NULL;
+		}
+		if (!isset($_REQUEST['p'])) {
+			$_GET['p'] = 1;
+		}
+
+
+		$header = "<table class='table table-bordered table-condensed'><thead><tr><th class='text-center' width='50px'>#</th><th class='text-center' width='150px'>Ads ID</th><th class='text-center' width='150px'>Ads Pin</th><th class='text-center' >Supplier Name</th><th class='text-center' >Ads Name</th><th class='text-center' width='150px'>Document Date</th><th class='text-center' width='150px'>Receive Date</th><th class='text-center' width='150px'>Status</th><th class='text-center' width='150px'>Start Date</th><th class='text-center' width='150px'>Expiry Date</th><th class='text-center' width='300px'></th></tr></thead><tbody>";
+		$content = "";
+		$pagination = "";
+
+		$listExist = user::checkExist("advertisement_view");
+
+		if (!$listExist) {
+			$content .= "<tr><td class ='text-center' colspan='11'>No advertisement record.</td></tr>";
+		} else {
+
+			if (isset($_REQUEST['s'])) {
+
+				$s = $_GET['s'];
+
+				if ($_GET['s'] != "") {
+					$searchItm = $s;
+					$searchSQL = " AND (ads_name LIKE '%$searchItm%') OR (supplier_id LIKE '%$searchItm%') OR (ads_id LIKE '%$searchItm%')";
+					$get_search = "&s=$searchItm";
+				} else {
+					$searchItm = NULL;
+					$searchSQL = NULL;
+					$get_search = NULL;
+				}
+			} else {
+				$searchItm = NULL;
+				$searchSQL = NULL;
+				$get_search = NULL;
+			}
+
+			$page = $_GET['p'];
+
+			$current_page = $page;
+
+			$prev_page = ($current_page - 1);
+			$next_page = ($current_page + 1);
+
+			$max_result = 15;
+
+			$from = (($current_page * $max_result) - $max_result);
+
+			if (isset($_REQUEST['sid']) AND isset($_REQUEST['aid'])) {
+				$aid = $_GET['aid'];
+				$sid = $_GET['sid'];
+				$cond = "agent_id = '$aid' AND supplier_id = '$sid'";
+			} else {
+				$cond = "agent_id != 'NULL'";
+			}
+
+			if ($searchItm == NULL) {
+				$advertisementList_full = $this->db->select("advertisement_view", "*", "$cond ORDER BY id DESC");
+			} else {
+				$advertisementList_full = $this->db->select("advertisement_view", "*", "$cond $searchSQL ORDER BY id DESC");
+			}
+//
+			$total_row = count($advertisementList_full);
+
+
+			$total_pages = ceil($total_row / $max_result);
+
+			$pagination .= "<ul class='pagination pagination-sm'>";
+
+			if ($current_page > 1) {
+				$pagination .= "<li><a href='$self_address?p=$prev_page$get_search'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
+			} else {
+				$pagination .= "<li class='disabled'><a href='#'><span class='fa fa-angle-double-left fa-fw'></span> Back</a></li>";
+			}
+
+			if ($current_page >= 7) {
+				$pagination .= "<li><a href='$self_address?p=1$get_search'>1</a></li>";
+				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
+			}
+
+			for ($i = max(1, $current_page - 5); $i <= min($current_page + 5, $total_pages); $i++) {
+				if (($current_page) == $i) {
+					$pagination .= "<li class='active'><a href='#'>$i</a></li>";
+				} else {
+					$pagination .= "<li><a href='$self_address?p=$i$get_search'>$i</a></li>";
+				}
+			}
+
+			if ($current_page < $total_pages - 5) {
+				$pagination .= "<li class='disabled'><a href='#'>..</a></li>";
+				$pagination .= "<li><a href='$self_address?p=$total_pages$get_search'>$total_pages</a></li>";
+			}
+
+			if ($current_page < $total_pages) {
+				$pagination .= "<li><a href='$self_address?p=$next_page$get_search'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
+			} else {
+				$pagination .= "<li class='disabled'><a href='#'>Next <span class='fa fa-angle-double-right fa-fw'></span></a></li>";
+			}
+
+			$pagination .= "</ul>";
+
+
+			if ($searchItm == NULL) {
+				$advertisementList_limit = $this->db->select("advertisement_view", "*", "$cond ORDER BY id DESC LIMIT $from,$max_result");
+			} else {
+				$advertisementList_limit = $this->db->select("advertisement_view", "*", "$cond $searchSQL ORDER BY id DESC LIMIT $from,$max_result");
+			}
+
+
+			if ($total_row == 0) {
+				$content .= "<tr><td class ='text-center' colspan='11'>No advertisement record.</td></tr>";
+				$pagination = NULL;
+			} else {
+
+				if ($total_row <= $max_result) {
+					$pagination = NULL;
+				}
+
+				$x = $from + 1;
+
+				foreach ($advertisementList_limit as $value) {
+
+
+//                CONSTRUCT CONTENT
+					$ads_id = $value['ads_id'];
+					$ads_pin = ($value['ads_pin']) ? "Yes" : "No";
+
+					$supplier_data = user::getSupplierData("supplier_id", $value['supplier_id']);
+					$supplier_name = "<a href='" . BASE_PATH . "management/supplier?s=" . $supplier_data['comp_name'] . "'>" . $supplier_data['comp_name'] . "</a>";
+
+					$ads_name = $value['ads_name'];
+
+					$doc_date = ($value['date_doc'] != NULL) ? date("d M Y", strtotime($value['date_doc'])) : "N/A";
+					$receive_date = ($value['date_receive'] != NULL) ? date("d M Y", strtotime($value['date_receive'])) : "N/A";
+
+					$ads_status = $value['ads_status'];
+
+					$date_start = ($value['date_start'] != NULL) ? date("d M Y", strtotime($value['date_start'])) : "N/A";
+					$date_end = ($value['date_end'] != NULL) ? date("d M Y", strtotime($value['date_end'])) : "N/A";
+
+					$action = "<button type='button' class='btn btn-primary btn-xs btn-details-toggles' data-toggle='modal' data-target='#detailsModal' data-adsid='$ads_id' data-url='".BASE_PATH."management/ajaxAdsDetails'><i class='fa fa-file-text fa-fw'></i> Details</button>";
+
+					$content .= "<tr class='text-center'>";
+
+					$content .= "<td>$x</td>";
+					$content .= "<td>$ads_id</td>";
+					$content .= "<td>$ads_pin</td>";
+					$content .= "<td>$supplier_name</td>";
+					$content .= "<td>$ads_name</td>";
+					$content .= "<td>$doc_date</td>";
+					$content .= "<td>$receive_date</td>";
+					$content .= "<td>$ads_status</td>";
+					$content .= "<td>$date_start</td>";
+					$content .= "<td>$date_end</td>";
+					$content .= "<td class='details'>$action</td>";
+
+					$content .= "</tr>";
+					$x++;
+				}
+			}
+		}
+
+		$footer = "</tbody></table>";
+
+		$result = $header . $content . $footer . $pagination;
+
+
+
+		return $result;
+	}
+	
+	public function ajaxAdsDetails($ads_id) {
+
+		$ads_data = user::getAdsData("ads_id", "$ads_id");
+		$supplier_data = user::getSupplierData("supplier_id", $ads_data['supplier_id']);
+
+		$data = array();
+		$data['ads_name'] = $ads_data['ads_name'];
+		$data['comp_name'] = $supplier_data['comp_name'];
+		$data['day_left'] = floor((strtotime($ads_data['date_end']) - time()) / (60 * 60 * 24)) . " days";
+		$data['period'] = $ads_data['period'] . " month";
+		$data['payment'] = "RM " . number_format($ads_data['payment']);
+		$data['commission'] = "RM " . number_format($ads_data['commission']);
+		$data['link'] = ($ads_data['link'] != "#") ? "<a target='_blank' href='" . $ads_data['link'] . "'>" . $ads_data['link'] . "</a>" : "#";
+		$data['hashtag'] = ($ads_data['hashtag'] != NULL) ? "<a target='_blank' href='https://www.facebook.com/hashtag/" . $ads_data['hashtag'] . "'>" . $ads_data['hashtag'] . "</a>" : "N/A";
+		$data['adsImg'] = ($ads_data['img_lg'] != NULL) ? "<img src='". BASE_PATH . "public/images/ads/" . $ads_data['id'] . "/" . $ads_data['img_lg'] ."' width='100%'/>" : "This advertisement is not ready for viewing.";
+
+		return $data;
 	}
 
 }

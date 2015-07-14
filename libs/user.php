@@ -5,6 +5,13 @@ class user {
 	public function __construct() {
 		
 	}
+	public static function getAgentList($cond, $column = "*") {
+		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
+
+		$data = $db->select("user_accounts", "$column", "$cond");
+
+		return $data;
+	}
 
 	public static function getUserData($type, $arg) {
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
@@ -38,10 +45,10 @@ class user {
 		return $data;
 	}
 
-	public static function getSupplierList($cond, $col = "*") {
+	public static function getSupplierList($cond, $column = "*") {
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
 
-		$data = $db->select("user_suppliers", "$col", "$cond");
+		$data = $db->select("user_suppliers", "$column", "$cond");
 
 		return $data;
 	}
@@ -170,7 +177,7 @@ class user {
 		return $data;
 	}
 
-	public static function checkExist($tableName, $cond) {
+	public static function checkExist($tableName, $cond = NULL) {
 
 		$db = new database(DBTYPE, DBHOST, DBNAME, DBUSER, DBPASS);
 		$data = $db->count($tableName, $cond);
